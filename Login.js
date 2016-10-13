@@ -8,12 +8,18 @@ import {
   View,
   Image,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicator
 } from 'react-native';
+import buffer from 'buffer';
 
 class Login extends Component{
   constructor(props){
     super(props);
+
+    this.state = {
+      showProgress: false
+    }
   }
   render(){
     return(
@@ -21,6 +27,7 @@ class Login extends Component{
         <Image style={styles.logo} source={require('image!slice4')} />
         <Text style={styles.heading}>GithubBrowser</Text>
         <TextInput
+
           onChangeText={(text)=> this.setState({username: text})}
           style={styles.input}
           placeholder="Github username" />
@@ -28,9 +35,39 @@ class Login extends Component{
           onChangeText={(text)=> this.setState({password: text})}
           style={styles.input}
           placeholder="Github password" secureTextEntry={true}/>
-        <TouchableHighlight style={styles.button}><Text style={styles.buttonText}>Login</Text></TouchableHighlight>
+        <TouchableHighlight
+          onPress={this.onLoginPressed.bind(this)}
+          style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableHighlight>
+
+        <ActivityIndicator
+          animating={this.state.showProgress}
+          size="large"
+          style={styles.loader} />
       </View>
     );
+  }
+
+  onLoginPressed(){
+    console.log("ssfdasdf" + this.state.username);
+    this.setState({showProgress: true});
+
+    var b = new buffer.Buffer(this.state.username + ':' + this.state.password);
+    var encodedAuth = b.toString('base64');
+
+    fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization' : 'Basic ' + encodedAuth
+      }
+    })
+    .then((response)=> {
+      return response.json();
+    })
+    .then((results)=> {
+      console.log(results);
+      this.setState({showProgress: false});
+    })
   }
 }
 var styles = StyleSheet.create({
@@ -68,6 +105,9 @@ var styles = StyleSheet.create({
     fontSize: 22,
     color: '#FFF',
     alignSelf: 'center'
+  },
+  loader: {
+    marginTop: 20
   }
 });
 module.exports = Login;
