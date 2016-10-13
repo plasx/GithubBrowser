@@ -22,6 +22,15 @@ class Login extends Component{
     }
   }
   render(){
+    var errorCtrl = <View />;
+
+    if(!this.state.success && this.state.badCredentials){
+      errorCtrl = <Text style={styles.error}>Invalid Username or Password</Text>;
+    }
+
+    if(!this.state.success && this.state.unknownError){
+      errorCtrl = <Text style={styles.error}>unknownError</Text>;
+    }
     return(
       <View style={styles.container}>
         <Image style={styles.logo} source={require('image!slice4')} />
@@ -40,6 +49,8 @@ class Login extends Component{
           style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableHighlight>
+
+        {errorCtrl}
 
         <ActivityIndicator
           animating={this.state.showProgress}
@@ -62,12 +73,29 @@ class Login extends Component{
       }
     })
     .then((response)=> {
+      if(response.status >= 200 && response.status < 300){
+        return response;
+      }
+
+      throw {
+        badCredentials: response.status == 401,
+        unknownError: response.status != 401
+      }
+    })
+    .then((response)=> {
       return response.json();
     })
     .then((results)=> {
       console.log(results);
-      this.setState({showProgress: false});
+      this.setState({success: true});
     })
+    .catch((err)=> {
+      this.setState(err);
+      this.setState({success: false}); // NOTE TO SELF TO REMOVE
+    })
+    .finally(()=> {
+      this.setState({showProgress: false});
+    });
   }
 }
 var styles = StyleSheet.create({
@@ -108,6 +136,10 @@ var styles = StyleSheet.create({
   },
   loader: {
     marginTop: 20
+  },
+  error: {
+    color: 'red',
+    paddingTop:10
   }
 });
 module.exports = Login;
