@@ -12,13 +12,22 @@ import {
 } from 'react-native';
 
 class Login extends Component{
+  constructor(props){
+    super(props);
+  }
   render(){
     return(
       <View style={styles.container}>
         <Image style={styles.logo} source={require('image!slice4')} />
-        <Text stlye={styles.heading}>GithubBrowser</Text>
-        <TextInput style={styles.input} placeholder="Github username" />
-        <TextInput style={styles.input} placeholder="Github password" secureTextEntry={true}/>
+        <Text style={styles.heading}>GithubBrowser</Text>
+        <TextInput
+          onChangeText={(text)=> this.setState({username: text})}
+          style={styles.input}
+          placeholder="Github username" />
+        <TextInput
+          onChangeText={(text)=> this.setState({password: text})}
+          style={styles.input}
+          placeholder="Github password" secureTextEntry={true}/>
         <TouchableHighlight style={styles.button}><Text style={styles.buttonText}>Login</Text></TouchableHighlight>
       </View>
     );
