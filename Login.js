@@ -7,7 +7,8 @@ import {
   Text,
   View,
   Image,
-  TextInput
+  TextInput,
+  TouchableHighlight
 } from 'react-native';
 
 class Login extends Component{
@@ -18,6 +19,7 @@ class Login extends Component{
         <Text stlye={styles.heading}>GithubBrowser</Text>
         <TextInput style={styles.input} placeholder="Github username" />
         <TextInput style={styles.input} placeholder="Github password" secureTextEntry={true}/>
+        <TouchableHighlight style={styles.button}><Text style={styles.buttonText}>Login</Text></TouchableHighlight>
       </View>
     );
   }
@@ -45,6 +47,18 @@ var styles = StyleSheet.create({
     fontSize: 18,
     borderWidth: 1,
     borderColor: '#48bbec'
+  },
+  button: {
+    height: 50,
+    backgroundColor: '#48BBEC',
+    alignSelf: 'stretch',
+    marginTop:10,
+    justifyContent:'center'
+  },
+  buttonText: {
+    fontSize: 22,
+    color: '#FFF',
+    alignSelf: 'center'
   }
 });
 module.exports = Login;
