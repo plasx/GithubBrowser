@@ -14,10 +14,25 @@ import {
 import Login from './Login';
 
 export default class GithubBrowser extends Component {
+  constructor(props){
+    super(props);
+    this.state = {isLoggedIn: false};
+  }
   render() {
-    return (
-      <Login />
-    );
+    if(this.state.isLoggedIn){
+      return (
+        <View style={styles.container}>
+          <Text style={styles.welcome}>Welcome, Logged in</Text>
+        </View>
+      );
+    }else{
+      return (
+        <Login onLogin={this.onLogin.bind(this)} />
+      );
+    }
+  }
+  onLogin(){
+    this.setState({isLoggedIn: true});
   }
 }
 
