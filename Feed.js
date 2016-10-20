@@ -1,10 +1,12 @@
 'use strict';
-
+import moment from 'moment';
 import React, { Component } from 'react';
 import {
   Text,
   View,
-  ListView
+  ListView,
+  ActivityIndicator,
+  Image
 } from 'react-native';
 
 class Feed extends Component{
@@ -15,7 +17,8 @@ class Feed extends Component{
       rowHasChanged: (r1, r2) => r1 != r2
     });
     this.state = {
-      dataSource: ds.cloneWithRows(['A','B','C'])
+      dataSource: ds,
+      showProgress: true
     };
   }
 
@@ -39,20 +42,62 @@ class Feed extends Component{
               ev.type == 'PushEvent');
           this.setState({
             dataSource: this.state.dataSource
-              .cloneWithRows(feedItems)
+              .cloneWithRows(feedItems),
+              showProgress: false
           })
         })
     });
   }
   renderRow(rowData){
-    return <Text style={{
-      color: '#333',
-      backgroundColor: '#fff',
-      alignSelf: 'center'
-    }}>
-      {(rowData.actor || {}).login}  </Text>
+    // return <Text style={{
+    //   color: '#333',
+    //   backgroundColor: '#fff',
+    //   alignSelf: 'center'
+    // }}>
+    //   {(rowData.actor || {}).login}
+    //  </Text>
+    return(
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+        padding: 20,
+        alignItems: 'center',
+        borderColor: '#D7D7D7',
+        borderBottomWidth: 1
+      }}>
+        <Image
+          source={{url:rowData.actor.avatar_url}}
+          style={{
+            height: 36,
+            width: 36,
+            borderRadius: 18
+          }}
+        />
+        <View style={{paddingLeft:20}}>
+          <Text style={{backgroundColor: '#fff'}}>{moment(rowData.created_at).fromNow()}</Text>
+          <Text style={{backgroundColor: '#fff'}}>
+            <Text style={{fontWeight:"600"}}>{rowData.actor.login}</Text> pushed to
+          </Text>
+          <Text style={{backgroundColor: '#fff'}}>{rowData.payload.ref.replace('refs/heads/','')}</Text>
+          <Text style={{backgroundColor: '#fff'}}>
+            at <Text style={{fontWeight: "600"}}>{rowData.repo.name}</Text>
+          </Text>
+        </View>
+      </View>
+    );
   }
   render(){
+    if(this.state.showProgress){
+      return(
+        <View style={{
+          flex:1,
+          justifyContent:'center'
+        }}><ActivityIndicator
+          size="large"
+          animating={true}/>
+          </View>
+      );
+    }
     return(
       <View style={{
         flex: 1,
