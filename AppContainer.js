@@ -5,7 +5,8 @@ import {
   Text,
   View,
   StyleSheet,
-  TabBarIOS
+  TabBarIOS,
+  NavigatorIOS
 } from 'react-native';
 import Feed from './Feed';
 
@@ -24,8 +25,15 @@ class AppContainer extends Component{
           title="Feed"
           selected={this.state.selectedTab == 'feed'}
           icon={require('image!feed')}
-          onPress={()=> this.setState({selectedTab: 'feed'})}>
-          <Feed />
+          onPress={()=> this.setState({selectedTab: 'feed'})}
+        >
+          <NavigatorIOS
+            initialRoute={{
+              component: Feed,
+              title: 'Feed',
+            }}
+            style={{flex: 1}}
+          />
 
         </TabBarIOS.Item>
         <TabBarIOS.Item
