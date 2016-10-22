@@ -12,11 +12,12 @@ import {
   View,
   ActivityIndicator
 } from 'react-native';
+
 import Login from './Login';
 import AppContainer from './AppContainer';
 import AuthService from './AuthService';
 
-export default class GithubBrowser extends Component {
+export class GithubBrowser extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -51,7 +52,7 @@ export default class GithubBrowser extends Component {
       );
     }else{
       return (
-        <Login onLogin={this.onLogin.bind(this)} />
+        <Login onLogin={this.onLogin} />
       );
     }
   }

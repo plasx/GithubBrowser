@@ -52,7 +52,7 @@ class Feed extends Component{
   }
 
   pressRow(rowData){
-    console.log(rowData);
+    // console.log(rowData);
     this.props.navigator.push({
       title: 'Push Event',
       component: PushPayload,
@@ -124,8 +124,7 @@ class Feed extends Component{
       }}>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={this.renderRow.bind(this)}
-        />
+          renderRow={this.renderRow.bind(this)} />
       </View>
     );
   }
