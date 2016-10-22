@@ -5,7 +5,8 @@ import {
   Text,
   View,
   ListView,
-  Image
+  Image,
+  StyleSheet
 } from 'react-native';
 
 
@@ -22,8 +23,18 @@ class PushPayload extends Component{
 
   renderRow(rowData){
     return(
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <Text>{rowData.sha.substring(0,6)} - {rowData.message}</Text>
+      <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          borderColor: '#D7D7D7',
+          borderBottomWidth: 1,
+          paddingTop: 20,
+          paddingBottom: 20,
+          padding: 10
+
+          }}
+      >
+        <Text><Text style={styles.bold}>{rowData.sha.substring(0,6)}</Text> - {rowData.message}</Text>
       </View>
     )
   }
@@ -37,17 +48,25 @@ class PushPayload extends Component{
         <Text style={{paddingTop:20, paddingBottom: 20, fontSize: 20}}>
           {moment(this.state.pushEvent.created_at).fromNow()}
         </Text>
-        <Text>{this.state.pushEvent.actor.login}</Text>
-        <Text>{this.state.pushEvent.payload.ref.replace('refs/heads/','')}</Text>
+        <Text><Text style={styles.bold}>{this.state.pushEvent.actor.login}</Text> pushed to</Text>
+        <Text style={styles.bold}>{this.state.pushEvent.payload.ref.replace('refs/heads/','')}</Text>
         <Text>{this.state.pushEvent.payload.ref}</Text>
-        <Text>{this.state.pushEvent.repo.name}</Text>
+        <Text>at <Text style={styles.bold}>{this.state.pushEvent.repo.name}</Text></Text>
 
-        <Text>{this.state.pushEvent.payload.commits.length} Commits</Text>
+        <Text style={{
+          paddingTop:  40,
+          fontSize:20
+        }}>{this.state.pushEvent.payload.commits.length} Commits</Text>
 
         <ListView dataSource={this.state.dataSource} renderRow={this.renderRow.bind(this)}/>
       </View>
     );
   }
 }
-
+var styles = StyleSheet.create({
+  bold: {
+    fontWeight: '800',
+    fontSize: 16
+  }
+})
 module.exports = PushPayload;
